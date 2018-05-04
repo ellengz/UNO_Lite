@@ -1,5 +1,7 @@
 package com.ellen.uno.model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -38,6 +40,7 @@ public class Computer extends Player{
      */
     private Card put(ArrayList<Card> candidates) {
         Card card = candidates.get(random.nextInt(candidates.size()));
+        Log.d("DEBUGGING", "Computer put " + card.toString());
         inHand.remove(card);
         return card;
     }

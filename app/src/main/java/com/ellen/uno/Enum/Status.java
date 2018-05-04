@@ -3,6 +3,7 @@ package com.ellen.uno.Enum;
 public enum Status {
 
     PLAYING(0, ""),
+    WAIT_FOR_USER(1, "Wait for user's input"),
     COMPUTER_WIN(100, "Computer wins! Bad luck!"),
     USER_WIN(101, "You win! Congratulations!"),
     NO_CARD(200, "Tie! No cards left in deck!")
