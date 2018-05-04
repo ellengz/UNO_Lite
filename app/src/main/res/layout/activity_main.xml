@@ -7,31 +7,19 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/text1"
+        android:id="@+id/deckCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cards_left_in_deck"
+        android:text="text1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.060000002" />
+        app:layout_constraintVertical_bias="0.01999998" />
 
     <TextView
-        android:id="@+id/deck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="80"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
-
-    <TextView
-        android:id="@+id/text2"
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/card_on_top_of_pile"
@@ -40,19 +28,19 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19999999" />
+        app:layout_constraintVertical_bias="0.07999998" />
 
     <TextView
-        android:id="@+id/topTile"
+        android:id="@+id/topCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="a"
+        android:text="text2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26999998" />
+        app:layout_constraintVertical_bias="0.16000003" />
 
     <TextView
         android:id="@+id/text3"
@@ -64,35 +52,41 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32999998" />
+        app:layout_constraintVertical_bias="0.22000003" />
 
-    <ScrollView
-        android:id="@+id/userPanel"
-        android:layout_width="344dp"
-        android:layout_height="316dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+    <Button
+        android:id="@+id/pick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/pick"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text3">
+        app:layout_constraintTop_toBottomOf="@+id/text3"
+        app:layout_constraintVertical_bias="0.39" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="335dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pick">
 
         <LinearLayout
-            android:id="@+id/buttons"
+            android:id="@+id/cards"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="visible"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="187dp">
-
-            <Button
-                android:id="@+id/pick"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/pick" />
+            android:orientation="vertical">
 
         </LinearLayout>
     </ScrollView>

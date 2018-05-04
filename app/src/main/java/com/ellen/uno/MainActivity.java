@@ -2,8 +2,13 @@ package com.ellen.uno;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 
+import com.ellen.uno.Enum.Color;
+import com.ellen.uno.Enum.Status;
 import com.ellen.uno.model.*;
 
 import java.util.ArrayList;
@@ -15,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     Card topOnPile;
     Computer computer;
     User user;
-    String status;
+    Status status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +31,17 @@ public class MainActivity extends AppCompatActivity {
         this.topOnPile = new Card();
         this.computer = new Computer();
         this.user = new User();
-        this.status = "Playing";
+        this.status = Status.PLAYING;
 
         prepareDeck();
         serveSevenCards(user);
         serveSevenCards(computer);
         topOnPile = deck.get(deck.size() - 1);
         deck.remove(topOnPile);
+        setScreen();
 
-        while (status.equals("Playing")) {
+        while (status == Status.PLAYING) {
 
-            setScreen();
             play();
 
         }
@@ -44,6 +49,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setScreen() {
+        TextView deckCount = findViewById(R.id.deckCount);
+        deckCount.setText(String.valueOf("Cards left in deck: " + deck.size()));
+        TextView topCard = findViewById(R.id.topCard);
+        topCard.setText(topOnPile.toString());
+
+        LinearLayout ll = findViewById(R.id.cards);
+        for (Card card: user.inHand) {
+            Button button = new Button(this);
+            button.setText(card.toString());
+            button.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            ll.addView(button);
+        }
 
     }
 
@@ -54,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         if (cardByComputer != null) {
             topOnPile = cardByComputer;
             if (computer.inHand.size() == 0) {
-                status = "Computer Wins";
+                status = Status.COMPUTER_WIN;
                 return;
             }
 
@@ -69,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 //        if (cardByUser != null) {
 //            topOnPile = cardByUser;
 //            if (user.inHand.size() == 0) {
-//                status = "You win";
+//                status = Status.USER_WIN;
 //                return;
 //            }
 //
