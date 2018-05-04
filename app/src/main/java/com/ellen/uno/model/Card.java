@@ -1,9 +1,5 @@
 package com.ellen.uno.model;
 
-enum Color {
-    RED, BLUE, GREEN, YELLOW
-}
-
 public class Card {
 
     private int number;
@@ -12,6 +8,10 @@ public class Card {
     public Card(int number, Color color) {
         this.number = number;
         this.color = color;
+    }
+
+    public Card() {
+
     }
 
     public int getNumber() {

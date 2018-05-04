@@ -1,20 +1,19 @@
 package com.ellen.uno.model;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 
-public class Computer {
+public class Computer extends Player{
 
-    public ArrayList<Card> inHand; // cards in hand
     Random random = new Random();
 
     /**
      * play for this turn
      * @param targetCard - card on the top of pile
-     * @param cards - cards left in deck
      * @return null if pick, or Card if able to put
      */
-    public Card play (Card targetCard, ArrayList<Card> cards) {
+    public Card play (Card targetCard) {
 
         ArrayList<Card> candidates = new ArrayList<>(); // playable cards
 
@@ -26,19 +25,10 @@ public class Computer {
         }
 
         if (candidates.size() == 0) {
-            this.pick(cards);
             return null;
         } else {
             return this.put(candidates);
         }
-    }
-
-    /**
-     * pick a card from the cards
-     * @param cards
-     */
-    private void pick(ArrayList<Card> cards) {
-        inHand.add(cards.get(cards.size() - 1));
     }
 
     /**
