@@ -1,21 +1,23 @@
-package com.ellen.uno.model;
+package com.ellen.uno.models;
 
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Random;
 
 public class Computer extends Player{
 
     Random random = new Random();
 
+    public Computer() {
+        this.type = "COMPUTER";
+    }
     /**
      * play for this turn
      * @param targetCard - card on the top of pile
      * @return null if pick, or Card if able to put
      */
-    public Card play (Card targetCard) {
+    public Card tryPut (Card targetCard) {
 
         ArrayList<Card> candidates = new ArrayList<>(); // playable cards
 
@@ -29,19 +31,20 @@ public class Computer extends Player{
         if (candidates.size() == 0) {
             return null;
         } else {
-            return this.put(candidates);
+            Card card = candidates.get(random.nextInt(candidates.size()));
+            Log.d("CARD", "Computer put " + card.toString() + " matching " + targetCard.toString());
+            inHand.remove(card);
+            return card;
         }
     }
-
-    /**
-     * randomly choose a card to be placed
-     * @param candidates
-     * @return Card
-     */
-    private Card put(ArrayList<Card> candidates) {
-        Card card = candidates.get(random.nextInt(candidates.size()));
-        Log.d("DEBUGGING", "Computer put " + card.toString());
-        inHand.remove(card);
-        return card;
-    }
+//
+//    /**
+//     * randomly choose a card to be put
+//     * @param candidates
+//     * @return Card
+//     */
+//    private Card choosePut(ArrayList<Card> candidates) {
+//
+//        return card;
+//    }
 }

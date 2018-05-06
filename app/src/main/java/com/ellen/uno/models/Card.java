@@ -1,6 +1,6 @@
-package com.ellen.uno.model;
+package com.ellen.uno.models;
 
-import com.ellen.uno.Enum.Color;
+import com.ellen.uno.enums.Color;
 
 public class Card {
 

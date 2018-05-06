@@ -9,149 +9,197 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.ellen.uno.Enum.Color;
-import com.ellen.uno.Enum.Status;
-import com.ellen.uno.model.*;
+import com.ellen.uno.enums.Color;
+import com.ellen.uno.enums.Status;
+import com.ellen.uno.models.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Card> deck;
-    Card topOnPile;
-    Computer computer;
+    ArrayList<Card> cardsInDeck;
+    Card cardOnTop;
+    Status gameStatus;
     User user;
-    Status status;
-    Card selected;
+    Computer computer;
+
+    LinearLayout ll;
+    TextView deckCountText;
+    TextView topCardText;
+    TextView computerCountText;
+    Button pickButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.deck = new ArrayList<>();
-        this.topOnPile = new Card();
-        this.computer = new Computer();
-        this.user = new User();
-        this.status = Status.PLAYING;
-        this.selected = new Card();
+        ll = findViewById(R.id.cards);
+        deckCountText = findViewById(R.id.deckCount);
+        topCardText = findViewById(R.id.topCard);
+        computerCountText = findViewById(R.id.computerCount);
+        pickButton = findViewById(R.id.pick);
+        gameStatus = Status.WAIT_FOR_COMPUTER;
+        Log.d("GAME", gameStatus.toString());
 
-        prepareDeck();
-        serveSevenCards(user);
-        serveSevenCards(computer);
-        topOnPile = deck.get(deck.size() - 1);
-        deck.remove(topOnPile);
-        setViewDeck();
-        setViewTopOnPile();
-        setViewComputer();
-        setViewCards();
+        initGame();
+        setGamePanel();
+        setUserPanel();
 
-        while (status == Status.PLAYING) {
-
-            play();
-
-        }
+        play();
 
     }
 
-    private void setViewCards() {
-        LinearLayout ll = findViewById(R.id.cards);
-        for (int i = 0; i < user.inHand.size(); i ++) {
-            final Button button = new Button(this);
-            button.setText(user.inHand.get(i).toString());
-            button.setId(i);
-            button.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            ll.addView(button);
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    selected = user.inHand.get(button.getId());
-                    Log.d("DEBUGGING", selected.toString() + " is selected ");
-                }
-            });
-        }
+    /**
+     * prepare deck and serve initial cards
+     */
+    private void initGame() {
 
-    }
+        cardsInDeck = new ArrayList<>();
+        cardOnTop = new Card();
+        user = new User();
+        computer = new Computer();
 
-    private void setViewTopOnPile() {
-        TextView topCard = findViewById(R.id.topCard);
-        topCard.setText(topOnPile.toString());
-    }
-
-    private void setViewDeck() {
-        TextView deckCount = findViewById(R.id.deckCount);
-        deckCount.setText(String.valueOf(deck.size()));
-    }
-
-    private void setViewComputer() {
-        TextView computerCount = findViewById(R.id.computerCount);
-        computerCount.setText(String.valueOf(computer.inHand.size()));
-    }
-
-
-    private void play() {
-
-        // computer's turn
-        Log.d("DEBUGGING", topOnPile.toString());
-        Card cardByComputer = computer.play(topOnPile);
-        if (cardByComputer != null) {
-            topOnPile = cardByComputer;
-            setViewTopOnPile();
-            if (computer.inHand.size() == 0) {
-                status = Status.COMPUTER_WIN;
-                setViewComputer();
-                Log.d("DEBUGGING", status.getMsg());
-                return;
-            }
-        } else {
-            serveCard(computer);
-            setViewDeck();
-        }
-        setViewComputer();
-//        status = Status.WAIT_FOR_USER;
-//        Log.d("DEBUGGING", status.getMsg());
-
-        // user's turn
-        // user's interaction
-
-//        Card cardByUser = user.play(topOnPile, null);
-//        if (cardByUser != null) {
-//            topOnPile = cardByUser;
-//            if (user.inHand.size() == 0) {
-//                status = Status.USER_WIN;
-//                return;
-//            }
-//
-//        } else {
-//            serveCard(user);
-//        }
-//        status = Status.PLAYING;
-
-    }
-
-
-
-    private void prepareDeck() {
+        // make cards
         for (int i = 0; i < 10; i ++) {
             for (int j = 0; j < 2; j ++) {
-                deck.add(new Card(i, Color.BLUE));
-                deck.add(new Card(i, Color.YELLOW));
-                deck.add(new Card(i, Color.RED));
-                deck.add(new Card(i, Color.GREEN));
+                cardsInDeck.add(new Card(i, Color.BLUE));
+                cardsInDeck.add(new Card(i, Color.YELLOW));
+                cardsInDeck.add(new Card(i, Color.RED));
+                cardsInDeck.add(new Card(i, Color.GREEN));
             }
         }
-        Collections.shuffle(deck);
-    }
-
-    private void serveCard(Player player) {
-        player.pick(deck.get(deck.size() - 1));
-        Log.d("DEBUGGING",  "Computer pick " + deck.get(deck.size() - 1).toString());
-        deck.remove(deck.size() - 1);
-    }
-
-    private void serveSevenCards(Player player) {
+        Collections.shuffle(cardsInDeck);
+        // serve each player initial seven cards
         for (int i = 0; i < 7; i ++) {
-            serveCard(player);
+            serveNextCard(computer);
+            serveNextCard(user);
+        }
+        // make the top card
+        cardOnTop = cardsInDeck.get(cardsInDeck.size() - 1);
+        cardsInDeck.remove(cardOnTop);
+        setGamePanel();
+
+    }
+
+    /**
+     * setup texts
+     */
+    private void setGamePanel() {
+        deckCountText.setText(String.valueOf(cardsInDeck.size()));
+        topCardText.setText(cardOnTop.toString());
+        computerCountText.setText(String.valueOf(computer.inHand.size()));
+    }
+
+    /**
+     * setup card buttons and pick button
+     */
+    private void setUserPanel() {
+        ll.removeAllViews();
+        for (int i = 0; i < user.inHand.size(); i ++) {
+            newCardButton(i);
+        }
+        pickButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickButtonClicked();
+            }
+        });
+    }
+
+    /**
+     * update a specific text view
+     */
+    private void updateGamePanel(TextView whichone, String value) {
+        whichone.setText(value);
+    }
+
+    /**
+     * handle the game process
+     */
+    private void play() {
+        Card card = computer.tryPut(cardOnTop);
+        if (card != null) {// computer chose to put
+            cardOnTop = card;
+            updateGamePanel(topCardText, card.toString());
+        } else {
+            serveNextCard(computer);
+        }
+        // whether pick or put, update number of cards left in computer's hand
+        updateGamePanel(computerCountText, String.valueOf(computer.inHand.size()));
+        if (computer.inHand.size() == 0) {
+            gameStatus = Status.COMPUTER_WIN;
+            Log.d("GAME", gameStatus.toString());
+        }
+        gameStatus = Status.WAIT_FOR_USER;
+//        Log.d("GAME", gameStatus.toString());
+    }
+
+    /**
+     * whether update user panel or warn user after user clicked a card button
+     * @param id
+     */
+    private void cardButtonClicked(int id, Card card) {
+        if (user.checkChosen(cardOnTop, user.inHand.get(id))) {
+            // chosen card is playable
+            updateGamePanel(topCardText, card.toString());
+            setUserPanel();
+            gameStatus = Status.WAIT_FOR_COMPUTER;
+//            Log.d("GAME", gameStatus.toString());
+            play();
+
+        } else {
+            gameStatus = Status.UNPLAYABLE_CARD_CHOSEN;
+            Log.d("GAME", gameStatus.toString() + cardOnTop.toString());
+        }
+        if (user.inHand.size() == 0) {
+            gameStatus = Status.USER_WIN;
+            Log.d("GAME", gameStatus.toString());
         }
     }
+
+    /**
+     * update user and game panel when user chose to pick
+     */
+    private void pickButtonClicked() {
+        serveNextCard(user);
+        setUserPanel();
+
+        updateGamePanel(deckCountText, String.valueOf(cardsInDeck.size()));
+        gameStatus = Status.WAIT_FOR_COMPUTER;
+        play();
+//        Log.d("GAME", gameStatus.toString());
+    }
+
+    /**
+     * serve the next card in deck to the given player
+     * @param player
+     */
+    private void serveNextCard(Player player) {
+        Card nextCard = cardsInDeck.get(cardsInDeck.size() - 1);
+        cardsInDeck.remove(nextCard);
+        player.pick(nextCard);
+    }
+
+    /**
+     * new a card button
+     * @param cardButtonId
+     */
+    private void newCardButton(final int cardButtonId) {
+        final Button cardButton = new Button(this);
+        cardButton.setText(user.inHand.get(cardButtonId).toString());
+        cardButton.setId(cardButtonId); // consistent with position in inHand
+        cardButton.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT));
+        ll.addView(cardButton); // add button to user panel
+
+        cardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cardButtonClicked(cardButtonId, user.inHand.get(cardButtonId));
+            }
+        });
+    }
+
 }
