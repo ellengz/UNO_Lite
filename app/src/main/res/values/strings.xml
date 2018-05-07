@@ -4,5 +4,6 @@
     <string name="pick">Pick</string>
     <string name="card_on_top_of_pile">Card on top of pile</string>
     <string name="cards_left_in_deck">Cards left in deck</string>
-    <string name="cards_left_in_computer_s_hand">Cards left in computer\'s hand</string>
+    <string name="cards_left_in_computer_s_hand">Computer has</string>
+    <string name="system_info">System Info</string>
 </resources>

@@ -2,9 +2,9 @@ package com.ellen.uno.enums;
 
 public enum Status {
 
-    WAIT_FOR_COMPUTER(100, "Wait for computer's move"),
-    WAIT_FOR_USER(101, "Wait for user's input"),
-    UNPLAYABLE_CARD_CHOSEN(102, "Please choose a playable card matching "),
+    TURN_COMPUTER(100, "Wait for computer's move"),
+    TURN_USER(101, "Wait for user's input"),
+    UNPLAYABLE_CARD_CHOSEN(102, "Please choose a card matching color/number of the card on the top of pile!"),
     COMPUTER_WIN(200, "Computer wins! Bad luck!"),
     USER_WIN(201, "You win! Congratulations!"),
     NO_CARD(202, "Tie! No cards left in deck!")
@@ -24,10 +24,7 @@ public enum Status {
 
     @Override
     public String toString() {
-        return "Status{" +
-                "code=" + code +
-                ", msg='" + msg + '\'' +
-                '}';
+        return "SYSTEM INFO:" + '\n' + msg;
     }
 
     Status(int code, String msg) {
