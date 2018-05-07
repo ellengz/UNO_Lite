@@ -37,14 +37,4 @@ public class Computer extends Player{
             return card;
         }
     }
-//
-//    /**
-//     * randomly choose a card to be put
-//     * @param candidates
-//     * @return Card
-//     */
-//    private Card choosePut(ArrayList<Card> candidates) {
-//
-//        return card;
-//    }
 }

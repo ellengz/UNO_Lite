@@ -144,9 +144,9 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * whether update user panel or warn user after user clicked a card button
-     * @param id
+     * @param chosenCard - card chosen
      */
-    private void cardButtonClicked(int id, Card chosenCard) {
+    private void cardButtonClicked(Card chosenCard) {
 
         if (gameStatus == Status.TURN_USER
                 || gameStatus == Status.UNPLAYABLE_CARD_CHOSEN) {
@@ -155,9 +155,14 @@ public class MainActivity extends AppCompatActivity {
                 cardOnTop = chosenCard; // replace card on top with chosen card
                 setUserCardsPanel(); // update cards panel
                 setGamePanel(false,true,false);
-                // let computer play
-                gameStatus = Status.TURN_COMPUTER;
-                compPlay();
+                if (user.inHand.size() == 0) {
+                    gameStatus = Status.USER_WIN;
+                    systemInfo.setText(gameStatus.toString());
+                } else {
+                    // let computer play
+                    gameStatus = Status.TURN_COMPUTER;
+                    compPlay();
+                }
 
             } else {
                 gameStatus = Status.UNPLAYABLE_CARD_CHOSEN;
@@ -165,10 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 systemInfo.setText(gameStatus.toString());
             }
 
-            if (user.inHand.size() == 0) {
-                gameStatus = Status.USER_WIN;
-                systemInfo.setText(gameStatus.toString());
-            }
+
         }
     }
 
@@ -176,12 +178,15 @@ public class MainActivity extends AppCompatActivity {
      * update user and game panel when user chose to pick
      */
     private void pickButtonClicked() {
-        serveNextCard(user);
-        setUserCardsPanel();
-        setGamePanel(true,false,false);
-        // let computer play
-        gameStatus = Status.TURN_COMPUTER;
-        compPlay();
+        if (gameStatus == Status.TURN_USER
+                || gameStatus == Status.UNPLAYABLE_CARD_CHOSEN) {
+            serveNextCard(user);
+            setUserCardsPanel();
+            setGamePanel(true, false, false);
+            // let computer play
+            gameStatus = Status.TURN_COMPUTER;
+            compPlay();
+        }
     }
 
     /**
@@ -189,9 +194,21 @@ public class MainActivity extends AppCompatActivity {
      * @param player
      */
     private void serveNextCard(Player player) {
-        Card nextCard = cardsInDeck.get(cardsInDeck.size() - 1);
-        cardsInDeck.remove(nextCard);
-        player.pick(nextCard);
+        if (cardsInDeck.size() > 0) {
+            Card nextCard = cardsInDeck.get(cardsInDeck.size() - 1);
+            cardsInDeck.remove(nextCard);
+            player.pick(nextCard);
+        } else {
+            gameStatus = Status.NO_CARD;
+            if (user.inHand.size() == computer.inHand.size()) {
+                gameStatus = Status.TIE;
+                systemInfo.setText(gameStatus.toString());
+            } else {
+                String msg = gameStatus.toString() + String.valueOf(
+                        user.inHand.size() < computer.inHand.size()? user.type : computer.type);
+                systemInfo.setText(msg);
+            }
+        }
     }
 
     /**
@@ -209,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         cardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardButtonClicked(cardButtonId, user.inHand.get(cardButtonId));
+                cardButtonClicked(user.inHand.get(cardButtonId));
             }
         });
     }
