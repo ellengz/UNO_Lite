@@ -2,6 +2,9 @@ package com.ellen.uno.models;
 
 import android.util.Log;
 
+/**
+ * user with a card-playability check
+ */
 public class User extends Player{
 
     public User() {

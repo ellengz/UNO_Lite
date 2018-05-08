@@ -2,6 +2,9 @@ package com.ellen.uno.models;
 
 import java.util.ArrayList;
 
+/**
+ * base class for player
+ */
 public class Player {
 
     private ArrayList<Card> inHand;

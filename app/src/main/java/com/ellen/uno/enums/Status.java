@@ -1,5 +1,8 @@
 package com.ellen.uno.enums;
 
+/**
+ * enum which indicates the game status
+ */
 public enum Status {
 
     TURN_COMPUTER(100, "Waiting for computer's move"),

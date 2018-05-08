@@ -2,6 +2,9 @@ package com.ellen.uno.models;
 
 import com.ellen.uno.enums.Color;
 
+/**
+ * card with a color and a number
+ */
 public class Card {
 
     private int number;

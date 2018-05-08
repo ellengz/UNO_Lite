@@ -5,6 +5,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * computer with a put strategy
+ */
 public class Computer extends Player{
 
     Random random = new Random();
