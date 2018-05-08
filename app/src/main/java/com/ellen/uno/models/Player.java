@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 public class Player {
 
-    public ArrayList<Card> inHand;
-    public String type;
+    private ArrayList<Card> inHand;
+
+    private String type;
 
     public Player() {
         this.inHand = new ArrayList<>();
@@ -19,4 +20,19 @@ public class Player {
         inHand.add(cardReceived);
     }
 
+    public ArrayList<Card> getInHand() {
+        return inHand;
+    }
+
+    public void setInHand(ArrayList<Card> inHand) {
+        this.inHand = inHand;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

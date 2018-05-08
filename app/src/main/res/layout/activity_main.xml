@@ -25,7 +25,7 @@
         <TextView
             android:id="@+id/text1"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/cards_left_in_deck"
             android:textSize="14sp" />
@@ -33,14 +33,14 @@
         <TextView
             android:id="@+id/deckCount"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/text2"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/card_on_top_of_pile"
             android:textSize="14sp" />
@@ -48,15 +48,16 @@
         <TextView
             android:id="@+id/topCard"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:fontFamily="casual" />
 
         <TextView
             android:id="@+id/text3"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/cards_left_in_computer_s_hand"
             android:textSize="14sp" />
@@ -64,17 +65,25 @@
         <TextView
             android:id="@+id/computerCount"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/systemInfo"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:gravity="start"
             android:textSize="14sp"
             android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/restart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/restart"
+            android:visibility="invisible"
+            tools:text="Click to start a new game" />
     </LinearLayout>
 
     <Button

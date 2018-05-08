@@ -10,7 +10,7 @@ public class Computer extends Player{
     Random random = new Random();
 
     public Computer() {
-        this.type = "COMPUTER";
+        setType("COMPUTER");
     }
     /**
      * play for this turn
@@ -21,7 +21,7 @@ public class Computer extends Player{
 
         ArrayList<Card> candidates = new ArrayList<>(); // playable cards
 
-        for (Card card: inHand) {
+        for (Card card: getInHand()) {
             if (card.getColor() == targetCard.getColor() ||
                     card.getNumber() == targetCard.getNumber()) {
                 candidates.add(card);
@@ -33,7 +33,7 @@ public class Computer extends Player{
         } else {
             Card card = candidates.get(random.nextInt(candidates.size()));
             Log.d("CARD", "Computer put " + card.toString() + " matching " + targetCard.toString());
-            inHand.remove(card);
+            getInHand().remove(card);
             return card;
         }
     }

@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     TextView computerCountText;
     TextView systemInfo;
     Button pickButton;
+    Button restartButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +43,10 @@ public class MainActivity extends AppCompatActivity {
         computerCountText = findViewById(R.id.computerCount);
         systemInfo = findViewById(R.id.systemInfo);
         pickButton = findViewById(R.id.pick);
+        restartButton = findViewById(R.id.restart);
 
         initGame();
-        gameStatus = Status.TURN_USER;
+        updateGameStatus(Status.TURN_USER);
     }
 
     /**
@@ -88,34 +90,13 @@ public class MainActivity extends AppCompatActivity {
                 pickButtonClicked();
             }
         });
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreate();
+            }
+        });
         setUserCardsPanel();
-
-    }
-
-    /**
-     * set game relevant texts
-     * @param updateDeck - true if update needed
-     * @param updateTop - true if update needed
-     * @param updateComputer - true if update needed
-     */
-    private void setGamePanel(boolean updateDeck, boolean updateTop, boolean updateComputer) {
-        if(updateDeck)
-            deckCountText.setText(String.valueOf(cardsInDeck.size()));
-        if(updateTop)
-            topCardText.setText(cardOnTop.toString());
-        if(updateComputer)
-            computerCountText.setText(String.valueOf(computer.inHand.size()));
-        systemInfo.setText("");
-    }
-
-    /**
-     * set card buttons
-     */
-    private void setUserCardsPanel() {
-        ll.removeAllViews();
-        for (int i = 0; i < user.inHand.size(); i ++) {
-            newCardButton(i);
-        }
     }
 
     /**
@@ -133,13 +114,62 @@ public class MainActivity extends AppCompatActivity {
             }
             setGamePanel(true,true,true);
 
-            if (computer.inHand.size() == 0) {
-                gameStatus = Status.COMPUTER_WIN;
-                systemInfo.setText(gameStatus.toString());
+            if (computer.getInHand().size() == 0) {
+                updateGameStatus(Status.COMPUTER_WIN);
+            } else {
+                updateGameStatus(Status.TURN_USER);
             }
 
-            gameStatus = Status.TURN_USER;
         }
+    }
+
+    /**
+     * set game relevant texts
+     * @param updateDeck - true if update needed
+     * @param updateTop - true if update needed
+     * @param updateComputer - true if update needed
+     */
+    private void setGamePanel(boolean updateDeck, boolean updateTop, boolean updateComputer) {
+        if(updateDeck)
+            deckCountText.setText(String.valueOf(cardsInDeck.size()));
+        if(updateTop)
+            topCardText.setText(cardOnTop.toString());
+            topCardText.setBackgroundColor(cardOnTop.getColor().getColorIndex());
+        if(updateComputer)
+            computerCountText.setText(String.valueOf(computer.getInHand().size()));
+        systemInfo.setText("");
+    }
+
+    /**
+     * set card buttons
+     */
+    private void setUserCardsPanel() {
+        ll.removeAllViews();
+        for (int i = 0; i < user.getInHand().size(); i ++) {
+            newCardButton(i);
+        }
+    }
+
+    /**
+     * new a card button
+     * @param cardButtonId
+     */
+    private void newCardButton(final int cardButtonId) {
+        final Button cardButton = new Button(this);
+        Card selected = user.getInHand().get(cardButtonId);
+        cardButton.setText(selected.toString());
+        cardButton.setId(cardButtonId); // consistent with position in inHand
+        cardButton.setBackgroundColor(selected.getColor().getColorIndex());
+        cardButton.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT));
+        ll.addView(cardButton); // add button to user panel
+
+        cardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cardButtonClicked(user.getInHand().get(cardButtonId));
+            }
+        });
     }
 
     /**
@@ -155,22 +185,15 @@ public class MainActivity extends AppCompatActivity {
                 cardOnTop = chosenCard; // replace card on top with chosen card
                 setUserCardsPanel(); // update cards panel
                 setGamePanel(false,true,false);
-                if (user.inHand.size() == 0) {
-                    gameStatus = Status.USER_WIN;
-                    systemInfo.setText(gameStatus.toString());
+                if (user.getInHand().size() == 0) {
+                    updateGameStatus(Status.USER_WIN);
                 } else {
-                    // let computer play
-                    gameStatus = Status.TURN_COMPUTER;
-                    compPlay();
+                    updateGameStatus(Status.TURN_COMPUTER);
                 }
 
             } else {
-                gameStatus = Status.UNPLAYABLE_CARD_CHOSEN;
-                // warn user
-                systemInfo.setText(gameStatus.toString());
+                updateGameStatus(Status.UNPLAYABLE_CARD_CHOSEN);
             }
-
-
         }
     }
 
@@ -183,9 +206,7 @@ public class MainActivity extends AppCompatActivity {
             serveNextCard(user);
             setUserCardsPanel();
             setGamePanel(true, false, false);
-            // let computer play
-            gameStatus = Status.TURN_COMPUTER;
-            compPlay();
+            updateGameStatus(Status.TURN_COMPUTER);
         }
     }
 
@@ -199,36 +220,32 @@ public class MainActivity extends AppCompatActivity {
             cardsInDeck.remove(nextCard);
             player.pick(nextCard);
         } else {
-            gameStatus = Status.NO_CARD;
-            if (user.inHand.size() == computer.inHand.size()) {
-                gameStatus = Status.TIE;
-                systemInfo.setText(gameStatus.toString());
-            } else {
-                String msg = gameStatus.toString() + String.valueOf(
-                        user.inHand.size() < computer.inHand.size()? user.type : computer.type);
-                systemInfo.setText(msg);
-            }
+            updateGameStatus(Status.NO_CARD);
         }
     }
 
     /**
-     * new a card button
-     * @param cardButtonId
+     * update game status
      */
-    private void newCardButton(final int cardButtonId) {
-        final Button cardButton = new Button(this);
-        cardButton.setText(user.inHand.get(cardButtonId).toString());
-        cardButton.setId(cardButtonId); // consistent with position in inHand
-        cardButton.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT));
-        ll.addView(cardButton); // add button to user panel
+    private void updateGameStatus(Status newStatus) {
+        gameStatus = newStatus;
+        systemInfo.setText(gameStatus.toString());
 
-        cardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cardButtonClicked(user.inHand.get(cardButtonId));
-            }
-        });
+        switch (newStatus) {
+            case TURN_COMPUTER:
+                compPlay();
+                break;
+            case NO_CARD:
+                if (user.getInHand().size() == computer.getInHand().size()) {
+                    updateGameStatus(Status.TIE);
+                } else {
+                    updateGameStatus(user.getInHand().size() < computer.getInHand().size()?
+                            Status.USER_WIN : Status.COMPUTER_WIN);
+                }
+                break;
+            case USER_WIN: case COMPUTER_WIN: case TIE:
+                restartButton.setVisibility(View.VISIBLE);
+                break;
+        }
     }
-
 }

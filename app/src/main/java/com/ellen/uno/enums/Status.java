@@ -7,7 +7,7 @@ public enum Status {
     UNPLAYABLE_CARD_CHOSEN(102, "Please choose a card matching color/number of the card on the top of pile!"),
     COMPUTER_WIN(200, "Computer wins! Bad luck!"),
     USER_WIN(201, "You win! Congratulations!"),
-    NO_CARD(202, "No cards left in deck! According to the number of cards left in hand, the winner is "),
+    NO_CARD(202, "No cards left in deck!"),
     TIE(203, "Tie!")
 
     ;
@@ -25,7 +25,7 @@ public enum Status {
 
     @Override
     public String toString() {
-        return "SYSTEM INFO:" + '\n' + msg;
+        return '\n' + "SYSTEM INFO:" + '\n' + msg + '\n';
     }
 
     Status(int code, String msg) {
