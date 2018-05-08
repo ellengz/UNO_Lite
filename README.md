@@ -13,7 +13,8 @@ Summary of this implemented version:
 * only 80 cards in total (2x[0,9] for each color)
 * for each turn, player has to either pick or put
 * computer randomly chooses a playable card (if there's any) in its turn
-* the first player who has no card left in hand wins
+* the first player who has no card left in hand wins  
+
 Especially:  
 * for each game, user always plays first ("user-friendly")
 * if no cards left in deck, the player who has fewer cards in hand will win
