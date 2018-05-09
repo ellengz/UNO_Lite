@@ -35,7 +35,6 @@ public class Computer extends Player{
             return null;
         } else {
             Card card = candidates.get(random.nextInt(candidates.size()));
-            Log.d("CARD", "Computer put " + card.toString() + " matching " + targetCard.toString());
             getInHand().remove(card);
             return card;
         }

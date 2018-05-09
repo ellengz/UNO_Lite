@@ -15,7 +15,6 @@ public class User extends Player{
         if (targetCard.getNumber() == chosenCard.getNumber() ||
                 targetCard.getColor() == chosenCard.getColor()) {
             getInHand().remove(chosenCard);
-            Log.d("CARD", "User put " + chosenCard.toString() + " matching " + targetCard.toString());
             return true;
         } else {
             return false;

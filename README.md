@@ -16,8 +16,8 @@ Summary of this implemented version:
 * the first player who has no card left in hand wins  
 
 Especially:  
-* for each game, user always plays first ("user-friendly")
-* if no cards left in deck, the player who has fewer cards in hand will win
+* for each game, user always plays first
+* if no cards left in deck, the cards that have been played (excludes cards left in players' hands) are shuffled and replenished in the deck.
 
 ### Design
  

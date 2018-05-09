@@ -19,6 +19,7 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity {
 
     ArrayList<Card> cardsInDeck;
+    ArrayList<Card> cardsPlayed;
     Card cardOnTop;
     Status gameStatus;
     User user;
@@ -58,11 +59,12 @@ public class MainActivity extends AppCompatActivity {
     private void initGame() {
 
         cardsInDeck = new ArrayList<>();
+        cardsPlayed = new ArrayList<>();
         cardOnTop = new Card();
         user = new User();
         computer = new Computer();
 
-        // make cards
+        // prepare cards in deck
         for (int i = 0; i < 10; i ++) {
             for (int j = 0; j < 2; j ++) {
                 cardsInDeck.add(new Card(i, Color.BLUE));
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 cardsInDeck.add(new Card(i, Color.GREEN));
             }
         }
+        // shuffle the deck
         Collections.shuffle(cardsInDeck);
 
         // serve each player initial seven cards
@@ -108,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             if (card != null) {
                 // computer can find at least one playable card
                 cardOnTop = card;
+                cardsPlayed.add(card);
             } else {
                 // computer can't find one playable card
                 serveNextCard(computer);
@@ -185,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 cardOnTop = chosenCard; // replace card on top with chosen card
                 setUserCardsPanel(); // update cards panel
                 setGamePanel(false,true,false);
+                cardsPlayed.add(chosenCard); // add this card to played list
                 if (user.getInHand().size() == 0) {
                     updateGameStatus(Status.USER_WIN);
                 } else {
@@ -220,7 +225,12 @@ public class MainActivity extends AppCompatActivity {
             cardsInDeck.remove(nextCard);
             player.pick(nextCard);
         } else {
-            updateGameStatus(Status.NO_CARD);
+            // add already played cards back to deck
+            Collections.shuffle(cardsPlayed);
+            cardsInDeck.addAll(cardsPlayed);
+            cardsPlayed.clear();
+            // try serve again
+            serveNextCard(player);
         }
     }
 
@@ -234,14 +244,6 @@ public class MainActivity extends AppCompatActivity {
         switch (newStatus) {
             case TURN_COMPUTER:
                 compPlay();
-                break;
-            case NO_CARD:
-                if (user.getInHand().size() == computer.getInHand().size()) {
-                    updateGameStatus(Status.TIE);
-                } else {
-                    updateGameStatus(user.getInHand().size() < computer.getInHand().size()?
-                            Status.USER_WIN : Status.COMPUTER_WIN);
-                }
                 break;
             case USER_WIN: case COMPUTER_WIN: case TIE:
                 restartButton.setVisibility(View.VISIBLE);
