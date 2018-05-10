@@ -11,17 +11,8 @@ public enum Status {
     COMPUTER_WIN(200, "Computer wins! Bad luck!"),
     USER_WIN(201, "You win! Congratulations!"),
     NO_CARD(202, "No cards left in deck!"),
-    TIE(203, "Tie!")
 
     ;
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
 
     private Integer code;
     private String msg;

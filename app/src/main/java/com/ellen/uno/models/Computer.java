@@ -1,7 +1,5 @@
 package com.ellen.uno.models;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -10,14 +8,14 @@ import java.util.Random;
  */
 public class Computer extends Player{
 
-    Random random = new Random();
+    private Random random = new Random();
 
     public Computer() {
         setType("COMPUTER");
     }
     /**
      * play for this turn
-     * @param targetCard - card on the top of pile
+     * @param targetCard card on the top of pile
      * @return null if pick, or Card if able to put
      */
     public Card tryPut (Card targetCard) {

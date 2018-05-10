@@ -2,7 +2,6 @@ package com.ellen.uno;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -129,9 +128,9 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * set game relevant texts
-     * @param updateDeck - true if update needed
-     * @param updateTop - true if update needed
-     * @param updateComputer - true if update needed
+     * @param updateDeck true if update needed
+     * @param updateTop true if update needed
+     * @param updateComputer true if update needed
      */
     private void setGamePanel(boolean updateDeck, boolean updateTop, boolean updateComputer) {
         if(updateDeck)
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * new a card button
-     * @param cardButtonId
+     * @param cardButtonId id of button/index in inHand
      */
     private void newCardButton(final int cardButtonId) {
         final Button cardButton = new Button(this);
@@ -178,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * whether update user panel or warn user after user clicked a card button
-     * @param chosenCard - card chosen
+     * @param chosenCard card chosen
      */
     private void cardButtonClicked(Card chosenCard) {
 
@@ -217,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * serve the next card in deck to the given player
-     * @param player
+     * @param player player to be served
      */
     private void serveNextCard(Player player) {
         if (cardsInDeck.size() > 0) {
@@ -245,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
             case TURN_COMPUTER:
                 compPlay();
                 break;
-            case USER_WIN: case COMPUTER_WIN: case TIE:
+            case USER_WIN: case COMPUTER_WIN:
                 restartButton.setVisibility(View.VISIBLE);
                 break;
         }

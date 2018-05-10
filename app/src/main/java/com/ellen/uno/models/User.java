@@ -1,7 +1,5 @@
 package com.ellen.uno.models;
 
-import android.util.Log;
-
 /**
  * user with a card-playability check
  */

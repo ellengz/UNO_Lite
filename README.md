@@ -17,7 +17,6 @@ Summary of this implemented version:
 
 Especially:  
 * for each game, user always plays first
-* if no cards left in deck, the cards that have been played (excludes cards left in players' hands) are shuffled and replenished in the deck.
+* if no cards left in deck, the cards that have been played will be shuffled and added back to the deck
 
 ### Design
- 

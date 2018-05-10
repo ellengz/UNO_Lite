@@ -27,10 +27,6 @@ public class Player {
         return inHand;
     }
 
-    public void setInHand(ArrayList<Card> inHand) {
-        this.inHand = inHand;
-    }
-
     public String getType() {
         return type;
     }
