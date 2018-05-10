@@ -21,13 +21,12 @@ Especially:
 
 ## 3. Design
 ### 3.1 Classes
+![GitHub](https://github.com/ellengz/UNO_Lite/blob/master/UNOClassDiagram.png "Class Diagram")
 #### MainActivity
 * initialise game view in onCreate()
 * create instances of Computer and Player
 * serve cards to players when requested
 * handle actions relating to pick and card buttons  
-
-**Models**-------------
 #### Card
 * abstraction of card
 #### Player
@@ -40,8 +39,6 @@ Especially:
 #### Computer
 * extends Player
 * tryPut(targetCard) to put a playable card or return null if nothing playable found  
-
-**Enums**-------------
 #### Color
 * enum contains colors needed in this game and associated color index
 #### Status
